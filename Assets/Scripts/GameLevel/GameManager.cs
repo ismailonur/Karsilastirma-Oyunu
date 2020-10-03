@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,8 +11,28 @@ public class GameManager : MonoBehaviour
     public GameObject ustDikdortgen;
     public GameObject altDikdortgen;
 
+    public Text ustTxt;
+    public Text altTxt;
+
+    TimerManager timerManager;
+
+    DairelerManager dairelerManager;
+
+    int oyunSayac, kacinciOyun;
+    int ustDeger, altDeger;
+    int buyukDeger;
+
+    int butonDegeri;
+
+    private void Awake()
+    {
+        timerManager = Object.FindObjectOfType<TimerManager>();
+        dairelerManager = Object.FindObjectOfType<DairelerManager>();
+    }
     void Start()
     {
+        kacinciOyun = 0;
+        oyunSayac = 20;
         SahnedekileriGetir();
     }
 
@@ -22,10 +43,237 @@ public class GameManager : MonoBehaviour
 
         ustDikdortgen.transform.GetComponent<RectTransform>().DOLocalMoveX(0, 1f).SetEase(Ease.OutBack);
         altDikdortgen.transform.GetComponent<RectTransform>().DOLocalMoveX(0, 1f).SetEase(Ease.OutBack);
+
+        OyunaBasla();
     }
 
     public void OyunaBasla()
     {
+        altYazi.GetComponent<CanvasGroup>().DOFade(0, .3f);
+        //timerManager.SureyiBaslat();
+        KacinciOyun();
         Debug.Log("Başladı");
     }
+
+    void KacinciOyun()
+    {
+        if(oyunSayac < 5)
+        {
+            kacinciOyun = 1;
+        }
+        else if(oyunSayac >= 5 && oyunSayac < 10)
+        {
+            kacinciOyun = 2;
+        }
+        else if(oyunSayac >= 10 && oyunSayac < 15)
+        {
+            kacinciOyun = 3;
+        }
+        else if (oyunSayac >= 15 && oyunSayac < 20)
+        {
+            kacinciOyun = 4;
+        }
+        else if(oyunSayac >= 20 && oyunSayac < 25)
+        {
+            kacinciOyun = 5;
+        }
+        else
+        {
+            kacinciOyun = Random.Range(1, 6);
+        }
+ 
+        switch (kacinciOyun)
+        {
+            case 1:
+                BirinciFonksiyon();
+                break;
+
+            case 2:
+                IkinciFonksiyon();
+                break;
+
+            case 3:
+                UcuncuFonksiyon();
+                break;
+
+            case 4:
+                DorduncuFonksiyon();
+                break;
+
+            case 5:
+                BesinciFonksiyon();
+                break;
+        }
+    }
+
+    void BirinciFonksiyon()
+    {
+        int rastgeleDeğer = Random.Range(1, 50);
+
+        if(rastgeleDeğer <= 25)
+        {
+            ustDeger = Random.Range(2, 50);
+            altDeger = ustDeger + Random.Range(1, 10);
+        }
+        else
+        {
+            ustDeger = Random.Range(2, 50);
+            altDeger = Mathf.Abs(ustDeger - Random.Range(1, 10));
+        }
+         
+        if(ustDeger > altDeger)
+        {
+            buyukDeger = ustDeger;
+        }
+        else
+        {
+            buyukDeger = altDeger;
+        }
+
+        ustTxt.text = ustDeger.ToString();
+        altTxt.text = altDeger.ToString();
+        altTxt.text = altDeger.ToString();
+    }
+
+    void IkinciFonksiyon()
+    {
+        int birinciSayi = Random.Range(0, 10);
+        int ikinciSayi = Random.Range(0, 20);
+        int ucuncuSayi = Random.Range(0, 10);
+        int dorduncuSayi = Random.Range(0, 20);
+
+        ustDeger = birinciSayi + ikinciSayi;
+        altDeger = ucuncuSayi + dorduncuSayi;
+
+        if(ustDeger > altDeger)
+        {
+            buyukDeger = ustDeger;
+        }
+        else if(altDeger > ustDeger)
+        {
+            buyukDeger = altDeger;
+        }
+        
+        if(ustDeger == altDeger)
+        {
+            IkinciFonksiyon();
+            return;
+        }
+
+        ustTxt.text = birinciSayi + " + " + ikinciSayi;
+        altTxt.text = ucuncuSayi + " + " + dorduncuSayi;
+    }
+
+    void UcuncuFonksiyon()
+    {
+        int birinciSayi = Random.Range(11, 30);
+        int ikinciSayi = Random.Range(0, 11);
+        int ucuncuSayi = Random.Range(11, 40);
+        int dorduncuSayi = Random.Range(0, 11);
+
+        ustDeger = birinciSayi - ikinciSayi;
+        altDeger = ucuncuSayi - dorduncuSayi;
+
+        if (ustDeger > altDeger)
+        {
+            buyukDeger = ustDeger;
+        }
+        else if (altDeger > ustDeger)
+        {
+            buyukDeger = altDeger;
+        }
+
+        if (ustDeger == altDeger)
+        {
+            UcuncuFonksiyon();
+            return;
+        }
+
+        ustTxt.text = birinciSayi + " - " + ikinciSayi;
+        altTxt.text = ucuncuSayi + " - " + dorduncuSayi;
+    }
+
+    void DorduncuFonksiyon()
+    {
+        int birinciSayi = Random.Range(0, 10);
+        int ikinciSayi = Random.Range(0, 10);
+        int ucuncuSayi = Random.Range(0, 10);
+        int dorduncuSayi = Random.Range(0, 10);
+
+        ustDeger = birinciSayi * ikinciSayi;
+        altDeger = ucuncuSayi * dorduncuSayi;
+
+        if(ustDeger > altDeger)
+        {
+            buyukDeger = ustDeger;
+        }
+        else if(altDeger > ustDeger)
+        {
+            buyukDeger = altDeger;
+        }
+        
+        if(ustDeger == altDeger)
+        {
+            DorduncuFonksiyon();
+            return;
+        }
+
+        ustTxt.text = birinciSayi + " X " + ikinciSayi;
+        altTxt.text = ucuncuSayi + " X " + dorduncuSayi;
+    }
+
+    void BesinciFonksiyon()
+    {
+        int bolen1 = Random.Range(2, 10);
+        ustDeger = Random.Range(2, 10);
+
+        int bolunen1 = bolen1 * ustDeger;
+
+        int bolen2 = Random.Range(2, 10);
+        altDeger = Random.Range(2, 10);
+
+        int bolunen2 = bolen2 * altDeger;
+
+        if(ustDeger > altDeger)
+        {
+            buyukDeger = ustDeger;
+        }
+        else if(altDeger > ustDeger)
+        {
+            buyukDeger = altDeger;
+        }
+
+        if(ustDeger == altDeger)
+        {
+            BesinciFonksiyon();
+            return;
+        }
+
+        ustTxt.text = bolunen1 + " / " + bolen1;
+        altTxt.text = bolunen2 + " / " + bolen2;
+    }
+
+    public void ButonDegeriniBelirle(string butonAdi)
+    {
+        if(butonAdi == "ustButon")
+        {
+            butonDegeri = ustDeger;
+        }
+        else if (butonAdi == "altButon")
+        {
+            butonDegeri = altDeger;
+        }
+
+        if(butonDegeri == buyukDeger)
+        {
+            dairelerManager.DaireninScaleAc(oyunSayac % 5);
+            oyunSayac++;
+            KacinciOyun();
+        }
+        else
+        {
+            
+        }
+    }
+
 }

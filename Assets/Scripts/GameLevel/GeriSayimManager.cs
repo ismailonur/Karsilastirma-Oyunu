@@ -18,7 +18,7 @@ public class GeriSayimManager : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(GeriyeSayRoutine());
+        //StartCoroutine(GeriyeSayRoutine());
     }
 
     IEnumerator GeriyeSayRoutine()
