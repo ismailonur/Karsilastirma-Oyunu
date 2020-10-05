@@ -11,12 +11,14 @@ public class GameManager : MonoBehaviour
     public GameObject ustDikdortgen;
     public GameObject altDikdortgen;
     public GameObject pausePanel;
+    public GameObject sonucPanel;
 
     public Text ustTxt, altTxt, puanTxt;
 
     TimerManager timerManager;
     DairelerManager dairelerManager;
     TrueFalseManager trueFalseManager;
+    SonucManager sonucManager;
 
     int oyunSayac, kacinciOyun;
     int ustDeger, altDeger;
@@ -24,6 +26,8 @@ public class GameManager : MonoBehaviour
     int butonDegeri;
 
     int toplamPuan, artisPuani;
+
+    int dogruAdet, yanlisAdet;
 
     private void Awake()
     {
@@ -293,11 +297,14 @@ public class GameManager : MonoBehaviour
 
             puanTxt.text = toplamPuan.ToString();
 
+            dogruAdet++;
+
             KacinciOyun();
         }
         else
         {
             trueFalseManager.TrueFalseScaleAc(false);
+            yanlisAdet++;
             HatayaGoreSayaciAzalt();
             KacinciOyun();
         }
@@ -316,5 +323,14 @@ public class GameManager : MonoBehaviour
     public void PausePaneliAc()
     {
         pausePanel.SetActive(true);
+    }
+
+    public void OyunuBitir()
+    {
+        sonucPanel.SetActive(true);
+
+        sonucManager = Object.FindObjectOfType<SonucManager>();
+
+        sonucManager.SonuclariGoster(dogruAdet, yanlisAdet, toplamPuan);
     }
 }

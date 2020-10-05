@@ -10,9 +10,16 @@ public class TimerManager : MonoBehaviour
     int kalanSure;
     bool sureKontrol;
 
+    GameManager gameManager;
+
+    private void Awake()
+    {
+        gameManager = Object.FindObjectOfType<GameManager>();
+    }
+
     void Start()
     {
-        kalanSure = 90;
+        kalanSure = 10;
         sureKontrol = true; 
     }
 
@@ -40,6 +47,8 @@ public class TimerManager : MonoBehaviour
             {
                 sureKontrol = false;
                 sureTxt.text = "00";
+
+                gameManager.OyunuBitir();
             }
 
             kalanSure--;
