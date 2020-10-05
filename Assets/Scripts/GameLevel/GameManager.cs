@@ -29,11 +29,17 @@ public class GameManager : MonoBehaviour
 
     int dogruAdet, yanlisAdet;
 
+    private AudioSource audioSource;
+
+    public AudioClip baslangicSesi, dogruSesi, yanlisSesi, bitisSesi;
+
     private void Awake()
     {
         timerManager = Object.FindObjectOfType<TimerManager>();
         dairelerManager = Object.FindObjectOfType<DairelerManager>();
         trueFalseManager = Object.FindObjectOfType<TrueFalseManager>();
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Start()
@@ -62,6 +68,8 @@ public class GameManager : MonoBehaviour
 
     public void OyunaBasla()
     {
+        audioSource.PlayOneShot(baslangicSesi);
+
         altYazi.GetComponent<CanvasGroup>().DOFade(0, .3f);
         timerManager.SureyiBaslat();
         KacinciOyun();
@@ -299,12 +307,15 @@ public class GameManager : MonoBehaviour
 
             dogruAdet++;
 
+            audioSource.PlayOneShot(dogruSesi);
+
             KacinciOyun();
         }
         else
         {
             trueFalseManager.TrueFalseScaleAc(false);
             yanlisAdet++;
+            audioSource.PlayOneShot(yanlisSesi);
             HatayaGoreSayaciAzalt();
             KacinciOyun();
         }
@@ -327,6 +338,8 @@ public class GameManager : MonoBehaviour
 
     public void OyunuBitir()
     {
+        audioSource.PlayOneShot(bitisSesi);
+
         sonucPanel.SetActive(true);
 
         sonucManager = Object.FindObjectOfType<SonucManager>();
