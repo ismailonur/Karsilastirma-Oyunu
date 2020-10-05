@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public GameObject altDikdortgen;
     public GameObject pausePanel;
     public GameObject sonucPanel;
+    public GameObject sayiyiSec;
 
     public Text ustTxt, altTxt, puanTxt;
 
@@ -58,7 +59,7 @@ public class GameManager : MonoBehaviour
     void SahnedekileriGetir()
     {
         ustPanel.GetComponent<CanvasGroup>().DOFade(1, 1f);
-        altYazi.GetComponent<CanvasGroup>().DOFade(1, 1f);
+        altYazi.GetComponent<CanvasGroup>().DOFade(1, 1f).OnComplete(DOTweenComplete);
 
         ustDikdortgen.transform.GetComponent<RectTransform>().DOLocalMoveX(0, 1f).SetEase(Ease.OutBack);
         altDikdortgen.transform.GetComponent<RectTransform>().DOLocalMoveX(0, 1f).SetEase(Ease.OutBack);
@@ -66,14 +67,19 @@ public class GameManager : MonoBehaviour
         OyunaBasla();
     }
 
+    void DOTweenComplete()
+    {
+        altYazi.GetComponent<CanvasGroup>().DOFade(0, .5f);
+        sayiyiSec.GetComponent<CanvasGroup>().DOFade(1, .5f);
+    }
+
     public void OyunaBasla()
     {
         audioSource.PlayOneShot(baslangicSesi);
 
-        altYazi.GetComponent<CanvasGroup>().DOFade(0, .3f);
+        
         timerManager.SureyiBaslat();
         KacinciOyun();
-        Debug.Log("Başladı");
     }
 
     void KacinciOyun()
