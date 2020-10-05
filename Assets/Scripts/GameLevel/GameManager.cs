@@ -10,29 +10,38 @@ public class GameManager : MonoBehaviour
     public GameObject altYazi;
     public GameObject ustDikdortgen;
     public GameObject altDikdortgen;
+    public GameObject pausePanel;
 
-    public Text ustTxt;
-    public Text altTxt;
+    public Text ustTxt, altTxt, puanTxt;
 
     TimerManager timerManager;
-
     DairelerManager dairelerManager;
+    TrueFalseManager trueFalseManager;
 
     int oyunSayac, kacinciOyun;
     int ustDeger, altDeger;
     int buyukDeger;
-
     int butonDegeri;
+
+    int toplamPuan, artisPuani;
 
     private void Awake()
     {
         timerManager = Object.FindObjectOfType<TimerManager>();
         dairelerManager = Object.FindObjectOfType<DairelerManager>();
+        trueFalseManager = Object.FindObjectOfType<TrueFalseManager>();
     }
+
     void Start()
     {
         kacinciOyun = 0;
-        oyunSayac = 20;
+        oyunSayac = 0;
+        toplamPuan = 0;
+
+        ustTxt.text = "";
+        altTxt.text = "";
+        puanTxt.text = "0";
+
         SahnedekileriGetir();
     }
 
@@ -50,7 +59,7 @@ public class GameManager : MonoBehaviour
     public void OyunaBasla()
     {
         altYazi.GetComponent<CanvasGroup>().DOFade(0, .3f);
-        //timerManager.SureyiBaslat();
+        timerManager.SureyiBaslat();
         KacinciOyun();
         Debug.Log("Başladı");
     }
@@ -60,26 +69,32 @@ public class GameManager : MonoBehaviour
         if(oyunSayac < 5)
         {
             kacinciOyun = 1;
+            artisPuani = 10;
         }
         else if(oyunSayac >= 5 && oyunSayac < 10)
         {
             kacinciOyun = 2;
+            artisPuani = 20;
         }
         else if(oyunSayac >= 10 && oyunSayac < 15)
         {
             kacinciOyun = 3;
+            artisPuani = 30;
         }
         else if (oyunSayac >= 15 && oyunSayac < 20)
         {
             kacinciOyun = 4;
+            artisPuani = 40;
         }
         else if(oyunSayac >= 20 && oyunSayac < 25)
         {
             kacinciOyun = 5;
+            artisPuani = 50;
         }
         else
         {
             kacinciOyun = Random.Range(1, 6);
+            artisPuani = 25;
         }
  
         switch (kacinciOyun)
@@ -125,9 +140,14 @@ public class GameManager : MonoBehaviour
         {
             buyukDeger = ustDeger;
         }
-        else
+        else if(ustDeger < altDeger)
         {
             buyukDeger = altDeger;
+        }
+
+        if(ustDeger == altDeger)
+        {
+            BirinciFonksiyon();
         }
 
         ustTxt.text = ustDeger.ToString();
@@ -266,14 +286,35 @@ public class GameManager : MonoBehaviour
 
         if(butonDegeri == buyukDeger)
         {
+            trueFalseManager.TrueFalseScaleAc(true);
             dairelerManager.DaireninScaleAc(oyunSayac % 5);
             oyunSayac++;
+            toplamPuan += artisPuani;
+
+            puanTxt.text = toplamPuan.ToString();
+
             KacinciOyun();
         }
         else
         {
-            
+            trueFalseManager.TrueFalseScaleAc(false);
+            HatayaGoreSayaciAzalt();
+            KacinciOyun();
         }
     }
 
+    void HatayaGoreSayaciAzalt()
+    {
+        oyunSayac -= (oyunSayac % 5 + 5);
+
+        if (oyunSayac < 0)
+        {
+            oyunSayac = 0;
+        }
+    }
+
+    public void PausePaneliAc()
+    {
+        pausePanel.SetActive(true);
+    }
 }

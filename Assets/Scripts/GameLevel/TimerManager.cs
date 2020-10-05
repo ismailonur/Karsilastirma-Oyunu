@@ -13,9 +13,7 @@ public class TimerManager : MonoBehaviour
     void Start()
     {
         kalanSure = 90;
-        sureKontrol = true;
-
-        
+        sureKontrol = true; 
     }
 
     public void SureyiBaslat()
